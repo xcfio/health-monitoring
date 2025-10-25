@@ -1,7 +1,7 @@
 import { isFastifyError, ValidationErrorHandler } from "./function"
 import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox"
+import { content } from "./content"
 import Fastify from "fastify"
-import { readFileSync } from "node:fs"
 
 export async function main() {
     const isDevelopment = process.env.NODE_ENV === "development"
@@ -15,7 +15,7 @@ export async function main() {
     }).withTypeProvider<TypeBoxTypeProvider>()
 
     fastify.get("/status", (_, reply) => reply.code(200).send("OK"))
-    fastify.get("/", (_, reply) => reply.type("text/html").send(readFileSync(".temp/HealthMonitoring_Dashboard.html")))
+    fastify.get("/", (_, reply) => reply.type("text/html").send(content))
 
     fastify.addHook("onError", (_, reply, error) => {
         if ((Error.isError(error) && error.message.startsWith("Rate limit exceeded")) || isFastifyError(error)) {
